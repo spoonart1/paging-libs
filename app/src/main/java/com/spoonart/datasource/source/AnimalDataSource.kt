@@ -1,7 +1,5 @@
 package com.spoonart.datasource.source
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import com.spoonart.datasource.model.Animal
@@ -34,11 +32,10 @@ class AnimalDataSource(
         val startIndex = LIMIT
 
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            callback.onResult(animals, startIndex, 1)
-            initialLoading.postValue(State.FINISH)
-            networkState.postValue(State.FINISH)
-        }, 2000)
+        Thread.sleep(2000)
+        callback.onResult(animals, startIndex, 1)
+        initialLoading.postValue(State.FINISH)
+        networkState.postValue(State.FINISH)
 
     }
 
@@ -48,10 +45,9 @@ class AnimalDataSource(
         val startIndex = params.key + LIMIT
         val animals = database.getAnimalBy(startIndex)
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            callback.onResult(animals, startIndex)
-            networkState.postValue(State.FINISH)
-        }, 2000)
+        Thread.sleep(2000)
+        callback.onResult(animals, startIndex)
+        networkState.postValue(State.FINISH)
 
     }
 

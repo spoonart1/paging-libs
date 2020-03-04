@@ -25,7 +25,7 @@ class AnimalRepository {
         executor: Executor,
         dataFactory: AnimalDataSourceFactory
     ): LiveData<PagedList<Animal>> {
-        return LivePagedListBuilder(dataFactory, getPageConfig())
+        return LivePagedListBuilder(dataFactory, getPageConfig(2))
             .setFetchExecutor(executor)
             .build()
     }

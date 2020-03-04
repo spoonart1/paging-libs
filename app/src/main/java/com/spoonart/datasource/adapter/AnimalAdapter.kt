@@ -1,6 +1,7 @@
 package com.spoonart.datasource.adapter
 
 import android.annotation.SuppressLint
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -19,10 +20,11 @@ class AnimalAdapter : PagedListAdapter<Animal, RecyclerView.ViewHolder>(diffCall
     private var state: AnimalDataSource.State? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
         return if (viewType == viewTypeAnimal) {
-            ViewHolder(View.inflate(parent.context, R.layout.adapter_animal, null))
+            ViewHolder(inflater.inflate(R.layout.adapter_animal, parent, false))
         } else {
-            LoadingViewHolder(View.inflate(parent.context, R.layout.adapter_loading, null))
+            LoadingViewHolder(inflater.inflate(R.layout.adapter_loading, parent, false))
         }
     }
 
