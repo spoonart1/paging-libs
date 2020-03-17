@@ -3,19 +3,29 @@ package com.spoonart.datasource.source
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import com.spoonart.datasource.model.Animal
+import database.ResourceDatabase
+import model.AnimalRes
 
 
 class AnimalDataSourceFactory :
-    DataSource.Factory<Int, Animal>() {
+    DataSource.Factory<Int, AnimalRes>() {
 
     private var animalDataSourceData = MutableLiveData<AnimalDataSource>()
 
-    override fun create(): DataSource<Int, Animal> {
-        val dataSource = AnimalDataSource(AnimalDatabase.database)
+    private val dataSource by lazy{
+        AnimalDataSource(ResourceDatabase.database)
+    }
+
+    override fun create(): DataSource<Int, AnimalRes> {
+
         animalDataSourceData.postValue(dataSource)
         return dataSource
     }
 
     fun animalDataSourceLiveData() = animalDataSourceData
+
+    fun invalidate(){
+        dataSource.invalidate()
+    }
 
 }

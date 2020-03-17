@@ -10,7 +10,7 @@ class AnimalDatabaseImpl : AnimalDatabase {
 
     override fun getAnimalBy(startIndex: Int, limit: Int): List<Animal> {
         val newAnimals = arrayListOf<Animal>()
-        var endOfIndex = startIndex + limit
+        var endOfIndex = startIndex + limit - 1
         if (endOfIndex >= animals.lastIndex) {
             endOfIndex = animals.lastIndex
         }
@@ -42,10 +42,11 @@ class AnimalDatabaseImpl : AnimalDatabase {
 
 interface AnimalDatabase {
     companion object{
+        const val LIMIT = 25
         val database by lazy {
             AnimalDatabaseImpl()
         }
     }
 
-    fun getAnimalBy(startIndex: Int, limit: Int = AnimalDataSource.LIMIT): List<Animal>
+    fun getAnimalBy(startIndex: Int, limit: Int = LIMIT): List<Animal>
 }

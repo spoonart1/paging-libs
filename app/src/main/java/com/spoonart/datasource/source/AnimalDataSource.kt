@@ -2,19 +2,15 @@ package com.spoonart.datasource.source
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
-import com.spoonart.datasource.model.Animal
+import database.ResourceDatabase
+import model.AnimalRes
 
 class AnimalDataSource(
-    private val database: AnimalDatabase
-) : PageKeyedDataSource<Int, Animal>() {
-
-    companion object {
-        const val LIMIT = 25
-    }
+    private val database: ResourceDatabase
+) : PageKeyedDataSource<Int, AnimalRes>() {
 
     private val initialLoading = MutableLiveData<State>()
     private val networkState = MutableLiveData<State>()
-
 
     fun getInitialLoading() = initialLoading
 
@@ -22,27 +18,28 @@ class AnimalDataSource(
 
     override fun loadInitial(
         params: LoadInitialParams<Int>,
-        callback: LoadInitialCallback<Int, Animal>
+        callback: LoadInitialCallback<Int, AnimalRes>
     ) {
 
         initialLoading.postValue(State.LOADING)
         networkState.postValue(State.LOADING)
 
         val animals = database.getAnimalBy(startIndex = 0)
-        val startIndex = LIMIT
+        val nextIndex = AnimalDatabase.LIMIT + 1
 
 
         Thread.sleep(2000)
-        callback.onResult(animals, startIndex, 1)
+        callback.onResult(animals, nextIndex, 0)
         initialLoading.postValue(State.FINISH)
         networkState.postValue(State.FINISH)
 
     }
 
-    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Animal>) {
+    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, AnimalRes>) {
         networkState.postValue(State.LOADING)
 
-        val startIndex = params.key + LIMIT
+        println("key: ${params.key}")
+        val startIndex = params.key + AnimalDatabase.LIMIT
         val animals = database.getAnimalBy(startIndex)
 
         Thread.sleep(2000)
@@ -51,7 +48,7 @@ class AnimalDataSource(
 
     }
 
-    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Animal>) {
+    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, AnimalRes>) {
         //ignored
     }
 

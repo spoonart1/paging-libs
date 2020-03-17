@@ -8,6 +8,7 @@ import com.spoonart.datasource.model.Animal
 import com.spoonart.datasource.repo.AnimalRepository
 import com.spoonart.datasource.source.AnimalDataSource
 import com.spoonart.datasource.source.AnimalDataSourceFactory
+import model.AnimalRes
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -18,12 +19,14 @@ class MainViewModel : ViewModel() {
     private val repository = AnimalRepository()
     private val networkState: LiveData<AnimalDataSource.State>
     private val initialLoading: LiveData<AnimalDataSource.State>
-    private val animalPagedLiveData: LiveData<PagedList<Animal>>
+    private val animalPagedLiveData: LiveData<PagedList<AnimalRes>>
+
+    private val dataFactory:AnimalDataSourceFactory
 
     init {
         executor = Executors.newFixedThreadPool(5)
-        val dataFactory = AnimalDataSourceFactory()
-        dataFactory.animalDataSourceLiveData()
+        dataFactory = AnimalDataSourceFactory()
+
         networkState =
             Transformations.switchMap(dataFactory.animalDataSourceLiveData()) { dataSource -> dataSource.getNetworkState() }
 
@@ -38,5 +41,9 @@ class MainViewModel : ViewModel() {
     fun getAnimals() = animalPagedLiveData
 
     fun getInitialLoading() = initialLoading
+
+    fun invalidate(){
+        dataFactory.invalidate()
+    }
 
 }

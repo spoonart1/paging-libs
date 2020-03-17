@@ -1,0 +1,55 @@
+apply plugin: 'com.android.library'
+apply plugin: 'org.jetbrains.kotlin.multiplatform'
+
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 28
+    }
+
+    sourceSets {
+        main {
+            setRoot('src/androidMain')
+        }
+        release {
+            setRoot('src/androidMainRelease')
+        }
+        debug {
+            setRoot('src/androidMainDebug')
+        }
+        test {
+            setRoot('src/androidUnitTest')
+        }
+        testRelease {
+            setRoot('src/androidUnitTestRelease')
+        }
+        testDebug {
+            setRoot('src/androidUnitTestDebug')
+        }
+    }
+}
+
+kotlin {
+    targets {
+        android()
+
+        def configure = {
+            binaries {
+                framework("MultiPlatformLibrary")
+            }
+        }
+        iosArm64("iosArm64", configure)
+        iosX64("iosX64", configure)
+
+    }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+            }
+        }
+    }
+}

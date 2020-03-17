@@ -9,11 +9,11 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.spoonart.datasource.R
-import com.spoonart.datasource.model.Animal
 import com.spoonart.datasource.source.AnimalDataSource
 import kotlinx.android.synthetic.main.adapter_animal.view.*
+import model.AnimalRes
 
-class AnimalAdapter : PagedListAdapter<Animal, RecyclerView.ViewHolder>(diffCallback) {
+class AnimalAdapter : PagedListAdapter<AnimalRes, RecyclerView.ViewHolder>(diffCallback) {
 
     private val viewTypeLoading = 0x12
     private val viewTypeAnimal = 1
@@ -73,7 +73,7 @@ class AnimalAdapter : PagedListAdapter<Animal, RecyclerView.ViewHolder>(diffCall
         private val label: TextView = view.tvAnimal
 
         @SuppressLint("SetTextI18n")
-        fun bind(animal: Animal) {
+        fun bind(animal: AnimalRes) {
             label.text = "${animal.name} - ${animal.animalCode}"
         }
     }
@@ -81,12 +81,12 @@ class AnimalAdapter : PagedListAdapter<Animal, RecyclerView.ViewHolder>(diffCall
     inner class LoadingViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     companion object {
-        val diffCallback = object : DiffUtil.ItemCallback<Animal>() {
-            override fun areItemsTheSame(oldItem: Animal, newItem: Animal): Boolean {
+        val diffCallback = object : DiffUtil.ItemCallback<AnimalRes>() {
+            override fun areItemsTheSame(oldItem: AnimalRes, newItem: AnimalRes): Boolean {
                 return oldItem.animalCode == newItem.animalCode
             }
 
-            override fun areContentsTheSame(oldItem: Animal, newItem: Animal): Boolean {
+            override fun areContentsTheSame(oldItem: AnimalRes, newItem: AnimalRes): Boolean {
                 return oldItem == newItem
             }
 

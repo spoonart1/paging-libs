@@ -4,12 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.spoonart.datasource.adapter.AnimalAdapter
-import com.spoonart.datasource.model.Animal
-import com.spoonart.datasource.source.AnimalDataSource
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -22,16 +19,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
         setupRecyclerView()
         observeViewModel()
     }
 
     private fun observeViewModel() {
         val viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+
+        fab.setOnClickListener { view ->
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
+
+            viewModel.invalidate()
+        }
+
 
         viewModel.getInitialLoading().observe(this, Observer {
             adapter.setState(it)
